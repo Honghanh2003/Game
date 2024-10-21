@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>WordBeater</title>
+  <style>
+    /* styles.css */
+body {
+    font-family: Arial, sans-serif; /* Đặt phông chữ thành Arial */
+    background-color: #F2E5BF; /* Nền màu xám */
+    color: black; /* Màu chữ */
+    margin: 0; /* Loại bỏ margin mặc định */
+    padding: 0; /* Loại bỏ padding mặc định */
+}
+
+.header {
+    background-color: #257180; /* màu nền của header */
+    text-align: center;
+    padding: 1rem;
+}
+
+.container {
+    text-align: center;
+    margin: 0 auto;
+}
+
+.content {
+    width: 50%;
+    margin: 0 auto;
+}
+
+.instruction {
+    font-size: 1.25rem;
+}
+
+.current-word {
+    font-size: 3rem;
+    margin-bottom: 1.25rem;
+}
+
+.word-input {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+}
+
+.message {
+    margin-top: 1rem;
+}
+
+.score-time {
+    margin-top: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.instructions {
+    margin-top: 1.25rem;
+}
+
+.instruction-card {
+    background-color: #FD8B51; /* màu nền cho thẻ hướng dẫn */
+    color: #CB6040;
+    padding: 1rem;
+}
+
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <h1>WordBeater</h1>
+  </header>
+  
+  <div class="container">
+    <div class="content">
+      <p class="instruction">Type The Given Word Within
+      <span class="seconds" id="seconds"></span> Seconds</p>
+      <h2 class="current-word" id="current-word">hello</h2>
+      <input type="text" class="word-input" placeholder="Start typing..." id="word-input" autofocus>
+      <h4 class="message" id="message"></h4>
+      
+      <!-- time & score columns -->
+      <div class="score-time">
+        <div>
+          <h3>Time Left: <span id="time">0</span></h3>
+        </div>
+        <div>
+          <h3>Score</h3>
+          <span id="score">0</span>
+        </div>
+      </div>
+      
+      <div class="instructions">
+        <div class="instruction-card">
+          <h5>Instructions</h5>
+          <p>Type each word in the given amount of seconds to score. To play again, just type the current word. Your score will reset.</p>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('load', init);
+
+    const levels = {
+      easy: 5,
+      medium: 3,
+      hard: 2
+    };
+
+    const currentLevel = levels.easy;
+
+    let time = currentLevel;
+    let score = 0;
+    let isPlaying;
+
+    const wordInput = document.querySelector('#word-input');
+    const currentWord = document.querySelector('#current-word');
+    const scoreDisplay = document.querySelector('#score');
+    const timeDisplay = document.querySelector('#time');
+    const message = document.querySelector('#message');
+    const seconds = document.querySelector('#seconds');
+
+    const words = [
+      'đạt ngu',
+      'óc chó',
+      'thiểu năng',
+      'ăn hại',
+      'đồ ngu',
+      'hai'
+    ];
+
+    // Khởi động game
+    function init() {
+      seconds.innerHTML = currentLevel;
+      showWord(words);
+
+      // Lắng nghe sự kiện nhập liệu và hoàn tất ký tự tiếng Việt
+      wordInput.addEventListener('input', startMatch);
+      wordInput.addEventListener('compositionend', startMatch);
+
+      // Lắng nghe phím Enter để xóa nội dung ô nhập liệu
+      wordInput.addEventListener('keydown', clearOnEnter);
+
+      setInterval(countdown, 1000);
+      setInterval(checkStatus, 50);
+    }
+
+    // Xóa nội dung ô nhập liệu khi nhấn Enter
+    function clearOnEnter(event) {
+      if (event.key === 'Enter') {
+        wordInput.value = ''; // Xóa nội dung
+        message.innerHTML = ''; // Xóa thông báo
+      }
+    }
+
+    // Bắt đầu trận đấu khi từ được nhập đúng
+    function startMatch() {
+      if (matchWords()) {
+        isPlaying = true;
+        time = currentLevel + 1;
+
+        showWord(words);
+        wordInput.value = ''; // Reset ô nhập liệu
+        score++;
+      }
+      scoreDisplay.innerHTML = score === -1 ? 0 : score;
+    }
+
+    // So sánh từ nhập vào với từ hiện tại
+    function matchWords() {
+      const input = wordInput.value.normalize('NFC').trim().toLowerCase();
+      const word = currentWord.innerHTML.normalize('NFC').trim().toLowerCase();
+
+      if (input === word) {
+        message.innerHTML = 'Correct!!!';
+        return true;
+      } else {
+        message.innerHTML = '';
+        return false;
+      }
+    }
+
+    // Hiển thị một từ ngẫu nhiên
+    function showWord(words) {
+      const randIndex = Math.floor(Math.random() * words.length);
+      currentWord.innerHTML = words[randIndex];
+    }
+
+    // Đếm ngược thời gian
+    function countdown() {
+      if (time > 0) {
+        time--;
+      } else if (time === 0) {
+        isPlaying = false;
+      }
+      timeDisplay.innerHTML = time;
+    }
+
+    // Kiểm tra trạng thái game
+    function checkStatus() {
+      if (!isPlaying && time === 0) {
+        message.innerHTML = 'Game Over!!!';
+        score = -1;
+      }
+    }
+
+  </script>
+</body>
+</html>
