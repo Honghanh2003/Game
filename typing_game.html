@@ -76,27 +76,27 @@ body {
   
   <div class="container">
     <div class="content">
-      <p class="instruction">Type The Given Word Within
-      <span class="seconds" id="seconds"></span> Seconds</p>
-      <h2 class="current-word" id="current-word">hello</h2>
+      <p class="instruction">Gõ các từ sau trong
+      <span class="seconds" id="seconds"></span> Giây</p>
+      <h2 class="current-word" id="current-word">xin chào</h2>
       <input type="text" class="word-input" placeholder="Start typing..." id="word-input" autofocus>
       <h4 class="message" id="message"></h4>
       
       <!-- time & score columns -->
       <div class="score-time">
         <div>
-          <h3>Time Left: <span id="time">0</span></h3>
+          <h3>Thời gian còn lại: <span id="time">0</span></h3>
         </div>
         <div>
-          <h3>Score</h3>
+          <h3>Điểm của chó đạt</h3>
           <span id="score">0</span>
         </div>
       </div>
       
       <div class="instructions">
         <div class="instruction-card">
-          <h5>Instructions</h5>
-          <p>Type each word in the given amount of seconds to score. To play again, just type the current word. Your score will reset.</p>
+          <h5>Đọc kĩ nè Đạt óc chó</h5>
+          <p>Trong thời gian yêu cầu hoàn thành từ thì được 1 điểm khum thì thua nhục như con chó. Để chơi lại, chỉ cần gõ từ hiện tại. Điểm số của chóa Đạt sẽ được đặt lại, để xóa toàn bộ từ cũ nhấn Enter.Hỉu chửa!!!</p>
         </div>
       </div>
       
@@ -191,7 +191,7 @@ body {
       const word = currentWord.innerHTML.normalize('NFC').trim().toLowerCase();
 
       if (input === word) {
-        message.innerHTML = 'Correct!!!';
+        message.innerHTML = 'Tạm được chơi típ đuy';
         return true;
       } else {
         message.innerHTML = '';
@@ -218,7 +218,7 @@ body {
     // Kiểm tra trạng thái game
     function checkStatus() {
       if (!isPlaying && time === 0) {
-        message.innerHTML = 'Game Over!!!';
+        message.innerHTML = 'Thua rồi Đạt ngu như chó :))))';
         score = -1;
       }
     }
